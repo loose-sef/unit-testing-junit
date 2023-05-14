@@ -271,9 +271,7 @@ Create the `StudentScore` class:
 ```java
 package org.loose.sef.junitexample;
 
-public record StudentScore {
-    private String name;
-    private int score;
+public record StudentScore(String name, int score) {
 }
 ```
 
@@ -283,7 +281,7 @@ Create the `Prize` enum:
 package org.loose.sef.junitexample;
 
 public enum Prize {
-    GOLD, SILVER, BRONZE, MENTION, NONE
+    GOLD, SILVER, BRONZE, MENTION
 }
 ```
 
@@ -319,7 +317,7 @@ public class StudentNotFoundException extends RuntimeException {
 }
 ```
 
-### 3.3 Step 3: Start writing the tests
+### 2.3 Step 3: Start writing the tests
 
 Before we write the actual getPrize method, we're going to write the tests for it first. This is a key part of the TDD
 approach - you write your tests before your actual code.
@@ -373,8 +371,13 @@ Here are the basic test cases we should consider:
 Now let's implement the first two test cases:
 
 ```java
+package org.loose.sef.junitexample;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -419,7 +422,7 @@ class MathChampionshipTest {
     @DisplayName("Test if searching for a student that doesn't exist throws a StudentNotFoundException")
     void testNoSuchStudent() {
         // Act and Assert
-        assertThrows(StudentNotFoundException.class, () -> mathChampionship.getPrize("Foo Bar"));
+        assertThrows(StudentNotFoundException.class, () -> mathChampionship.getPrize("Mr Nobody"));
     }
 }
 ```
@@ -434,7 +437,54 @@ Try running the tests now. To do this, press the green play button next to the t
 
 The tests should fail, because we haven't implemented the `getPrize` method yet.
 
-### 3.3.1 Step 3.1: Read Student scores from a file
+### 2.4 Step 4: Implement the `getPrize` method
+
+After writing your tests, you can now implement the `getPrize` method. Since we have already written the tests, we can
+easily validate if our implementation is correct by running the tests.
+
+Here's a basic implementation of the `getPrize` method:
+
+```java
+class MathChampionship {
+    // ...
+
+    public Prize getPrize(String studentName) {
+        StudentScore targetStudent = null;
+
+        for (StudentScore student : studentScores) {
+            if (student.name().equals(studentName)) {
+                targetStudent = student;
+                break;
+            }
+        }
+
+        if (targetStudent == null) {
+            throw new StudentNotFoundException(studentName);
+        }
+
+        // find the prize
+        if (targetStudent.score() > 95) {
+            return Prize.GOLD;
+        } else if (targetStudent.score() > 90) {
+            return Prize.SILVER;
+        } else if (targetStudent.score() > 85) {
+            return Prize.BRONZE;
+        } else if (targetStudent.score() > 80) {
+            return Prize.MENTION;
+        } else {
+            return null;
+        }
+    }
+
+    //...
+}
+```
+
+Try running the tests now. To do this, press the green play button next to the test class name in the project explorer.
+Do all of them pass?
+If not, try to fix your implementation until all the tests pass.
+
+### 2.4.1 Step 4.1: Read Student scores from a file
 
 We can read the student scores from a file. Create a file named `student_scores.csv` in the `src/test/resources` folder.
 We will store the data in CSV format.
@@ -489,11 +539,14 @@ class MathChampionshipTest {
 ```
 
 Now you can use this method in a test to read the student scores from the CSV file:
+You can also remove the lines where we set the student scores in the `setUp` method.
+Pay attention that the list of student scores is not sorted, so you might want to adjust the implementation to sort the
+list.
 
 ```java
 class MathChampionshipTest {
     // other methods
-    
+
     @Test
     @DisplayName("Template for reading student scores from a CSV file")
     @Disabled("This Test is just a template, do not add it to your test suite")
@@ -510,54 +563,9 @@ class MathChampionshipTest {
 }
 ```
 
-### 3.4 Step 4: Implement the `getPrize` method
+### 2.5 Step 5: Run the tests using the build tool
 
-After writing your tests, you can now implement the `getPrize` method. Since we have already written the tests, we can
-easily validate if our implementation is correct by running the tests.
-
-Here's a basic implementation of the `getPrize` method:
-
-```java
-class MathChampionship {
-    // ...
-
-    public Prize getPrize(String studentName) {
-        StudentScore targetStudent = null;
-
-        for (StudentScore student : studentScores) {
-            if (student.getName().equals(studentName)) {
-                targetStudent = student;
-                break;
-            }
-        }
-
-        if (targetStudent == null) {
-            throw new StudentNotFoundException();
-        }
-
-        // find the prize
-        if (studentScore.getScore() > 95) {
-            return Prize.GOLD;
-        } else if (studentScore.getScore() > 90) {
-            return Prize.SILVER;
-        } else if (studentScore.getScore() > 85) {
-            return Prize.BRONZE;
-        } else if (studentScore.getScore() > 80) {
-            return Prize.MENTION;
-        } else {
-            return Prize.NONE;
-        }
-    }
-    
-    //...
-}
-```
-
-Try running the tests now. To do this, press the green play button next to the test class name in the project explorer.
-Do all of them pass?
-If not, try to fix your implementation until all the tests pass.
-
-### 3.5 Step 5: Run the tests using the build tool
+#### Maven
 
 Now that we have written our tests, we can run them using the build tool. This is useful when you want to run your tests
 on a continuous integration server, or when you want to run your tests on a different machine.
@@ -568,7 +576,58 @@ For Maven, you can run the tests using the following command:
 mvn test
 ```
 
-You should see your test report in the `target/surefire-reports` directory.
+If you check the output of the command, you should see that none of the tests have actually run:
+
+```text
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ junit-example ---
+[INFO] Surefire report directory: /Users/mario/facultate/fis/2023/unit-tests/unit-testing-junit/target/surefire-reports
+
+-------------------------------------------------------
+T E S T S
+-------------------------------------------------------
+
+Results :
+
+Tests run: 0, Failures: 0, Errors: 0, Skipped: 0
+```
+
+This is because we haven't configured the surefire plugin to run our tests. To do this, we need to add the following
+configuration to our `pom.xml`:
+
+```xml
+
+<build>
+    <plugins>
+        <!-- other plugins -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.1.0</version>
+        </plugin>
+    </plugins>
+</build>
+```
+
+Now if you run the tests again, you should see that they are executed:
+
+```text
+[INFO] --- maven-surefire-plugin:3.1.0:test (default-test) @ junit-example ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.loose.sef.junitexample.MathChampionshipTest
+[WARNING] Tests run: 4, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.03 s - in org.loose.sef.junitexample.MathChampionshipTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[WARNING] Tests run: 4, Failures: 0, Errors: 0, Skipped: 1
+```
+
+You should also see your test report in the `target/surefire-reports` directory.
+
+#### Gradle
 
 For Gradle, you can run the tests using the following command:
 
@@ -577,8 +636,20 @@ For Gradle, you can run the tests using the following command:
 ```
 
 You should see your test report in the `build/reports/tests/test` directory.
+If you check the report, you should see that none of the tests have actually run.
+This is because we haven't configured the test task to run our tests with Junit5.
+To do this, we need to add the following configuration to our `build.gradle`:
 
-### 3.6 Step 6: Adding JaCoCo (Java Code Coverage) Plugin
+```groovy
+test {
+    useJUnitPlatform()
+}
+```
+
+Now if you run the tests again, the report will show that they were executed.
+
+
+### 2.6 Step 6: Adding JaCoCo (Java Code Coverage) Plugin
 
 JaCoCo is a code coverage library for Java. It provides information about the code coverage of your tests.
 
@@ -591,7 +662,7 @@ For Maven, you can add the Jacoco plugin to your `pom.xml`:
         <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.6</version>
+            <version>0.8.10</version>
             <executions>
                 <execution>
                     <goals>
@@ -619,28 +690,35 @@ plugins {
     id 'jacoco'
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        csv.enabled false
-        html.destination file("${buildDir}/jacocoHtml")
-    }
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
-test {
-    finalizedBy jacocoTestReport
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+
+    dependsOn test
 }
 ```
 
-After running your tests with Jacoco enabled (`mvn test` for Maven, `gradle test jacocoTestReport` for Gradle), a report
+After running your tests with Jacoco enabled (`mvn test` for Maven, `./gradlew test` for Gradle), a report
 will be generated detailing your test coverage. This can help you see how much of your code is covered by your tests and
 where you might need to add more tests.
 
-### 3.7 Step 7: Interpreting the Jacoco report
+### 2.7 Step 7: Interpreting the Jacoco report
 
 Jacoco generates a detailed report of which parts of your code have been tested. You can view this report by opening
 the `index.html` file in the directory specified in your Maven or Gradle configuration (by default, this is
-in `target/site/jacoco` for Maven and `build/reports/jacoco/test/html` for Gradle).
+in `target/site/jacoco` for Maven and `build/jacocoHtml` for Gradle).
 
 The report contains information such as the percentage of lines covered, the number of branches covered, and more. You
 should aim for high code coverage, but remember that 100% coverage does not necessarily mean your tests are perfect. It
@@ -649,10 +727,16 @@ is also important to write meaningful tests that check the logic of your code ra
 In the context of the `MathChampionship` class, you should ensure that you have tests covering all the possible prize
 categories, as well as edge cases such as students with the same score, and students not found in the list.
 
-### 3.8 Step 8: Adding Other tests
+### 2.8 Step 8: Adding Other tests
 
 Now that you have completed a basic test for the `MathChampionship` class, you can try adding more tests to cover other
 classes and methods in your project. You can also try adding more tests for the `MathChampionship` class to cover more
 edge cases.
 
-For example
+For example:
+
+* If the student with the highest score has 45% of the maxAchievable score, they do not win a gold medal, although they
+  should
+* If three students have a score of over 95%, and the forth has a score of 75%, they do not win a Silver medal, although
+  they should
+* ... many other edge cases

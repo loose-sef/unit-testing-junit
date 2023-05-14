@@ -4,11 +4,14 @@ A quick introduction to unit testing with JUnit 5.
 
 ## 1. Introduction
 
-JUnit is a simple framework which allows us to write automatically re-runnable unit tests. Having a good, comprehensive unit tests suite, offering proper overall coverage with respect to various coverage metrics, remains one of the best software development practices, ensuring better quality and stability for any software product.
+JUnit is a simple framework which allows us to write automatically re-runnable unit tests. Having a good, comprehensive
+unit tests suite, offering proper overall coverage with respect to various coverage metrics, remains one of the best
+software development practices, ensuring better quality and stability for any software product.
 
 ### 1.1. JUnit 5 Annotations
 
-Below, you can see the most frequently used annotations supported by JUnit 5. Each of them will be then presented in further detail.
+Below, you can see the most frequently used annotations supported by JUnit 5. Each of them will be then presented in
+further detail.
 
 1. @BeforeEach
 2. @BeforeAll
@@ -20,7 +23,12 @@ Below, you can see the most frequently used annotations supported by JUnit 5. Ea
 
 #### @BeforeEach and @AfterEach
 
-In JUnit 5 we no longer have the conventional methods setUp() and tearDown() from JUnit 3. Instead, there have been introduced the annotations @BeforeEach and @AfterEach, which fulfill the same purpose. Basically, by using annotation @BeforeEach on a method, that method will behave like the setUp() method from JUnit 3, being always invoked before the execution of each unit test, in order to properly set up the test environment. Similarly, a method annotated with @AfterEach will behave like the tearDown() method from JUnit 3 and will always be invoked after the execution of each unit test, in order to clean up the test environment.
+In JUnit 5 we no longer have the conventional methods setUp() and tearDown() from JUnit 3. Instead, there have been
+introduced the annotations @BeforeEach and @AfterEach, which fulfill the same purpose. Basically, by using annotation
+@BeforeEach on a method, that method will behave like the setUp() method from JUnit 3, being always invoked before the
+execution of each unit test, in order to properly set up the test environment. Similarly, a method annotated with
+@AfterEach will behave like the tearDown() method from JUnit 3 and will always be invoked after the execution of each
+unit test, in order to clean up the test environment.
 
 ```java
 class TestExample {
@@ -38,7 +46,10 @@ class TestExample {
 
 #### @BeforeAll and @AfterAll
 
-The @BeforeAll and @AfterAll annotations work similarly to the @BeforeEach and @AfterEach annotations, with one important difference: the methods annotated with @BeforeAll or @AfterAll will be executed only once per test suite (junit test class). These annotations are specifically meant to do the set up / clean up of test environment at test suite level (instead of test level, as @BeforeEach and @AfterEach do).
+The @BeforeAll and @AfterAll annotations work similarly to the @BeforeEach and @AfterEach annotations, with one
+important difference: the methods annotated with @BeforeAll or @AfterAll will be executed only once per test suite (
+junit test class). These annotations are specifically meant to do the set up / clean up of test environment at test
+suite level (instead of test level, as @BeforeEach and @AfterEach do).
 
 ```java
 class TestExample {
@@ -56,7 +67,10 @@ class TestExample {
 
 #### @Test
 
-The @Test annotation replaces the previous JUnit 3 convention of having the test prefix for each test method. In earlier JUnit versions it was required for a JUnit test class to extend org.junit.TestCase and for each test method to have its name starting with the test prefix. However, in JUnit 5, it is only needed to annotate each test method with the @Test annotation, just like in the below example.
+The @Test annotation replaces the previous JUnit 3 convention of having the test prefix for each test method. In earlier
+JUnit versions it was required for a JUnit test class to extend org.junit.TestCase and for each test method to have its
+name starting with the test prefix. However, in JUnit 5, it is only needed to annotate each test method with the @Test
+annotation, just like in the below example.
 
 ```java
 class TestExample {
@@ -69,7 +83,9 @@ class TestExample {
 
 #### @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
 
-Sometimes we might have long-running tests. In order to put a time limit on test execution, we can use the @Timeout annotation, which takes an integer value, expressed in milliseconds (the unit can be changed). This parameter can be very useful, especially when we are calling services which should answer within a predefined time period
+Sometimes we might have long-running tests. In order to put a time limit on test execution, we can use the @Timeout
+annotation, which takes an integer value, expressed in milliseconds (the unit can be changed). This parameter can be
+very useful, especially when we are calling services which should answer within a predefined time period
 
 ```java
 class TestExample {
@@ -83,7 +99,10 @@ class TestExample {
 
 #### Exception Testing
 
-It is very common for us to need to test methods that throw exceptions, and we wish to check that they are actually throwing the right exception in the right situation. In order to make sure that the code under test does throw the right exception, we can use assertThrows, which has the expected exception class as parameter (please notice the syntax: ExceptionClassName.class).
+It is very common for us to need to test methods that throw exceptions, and we wish to check that they are actually
+throwing the right exception in the right situation. In order to make sure that the code under test does throw the right
+exception, we can use assertThrows, which has the expected exception class as parameter (please notice the syntax:
+ExceptionClassName.class).
 
 ```java
 class TestExample {
@@ -96,7 +115,12 @@ class TestExample {
 
 #### @Disabled
 
-Sometimes we end up writing unit tests while the actual code is still under development (for example when doing Test Driven Development). It may happen that we wish to keep the unit tests testing the yet unimplemented features, while still running the test suite and getting relevant feedback for the already implemented part, and we would prefer an all green status if the implemented features work flawlessly. In this case, we can annotate the test methods in question with @Disabled("Not yet implemented"), and their execution will be skipped. JUnit 5 ignores all unit tests annotated with the @Disabled annotation.
+Sometimes we end up writing unit tests while the actual code is still under development (for example when doing Test
+Driven Development). It may happen that we wish to keep the unit tests testing the yet unimplemented features, while
+still running the test suite and getting relevant feedback for the already implemented part, and we would prefer an all
+green status if the implemented features work flawlessly. In this case, we can annotate the test methods in question
+with @Disabled("Not yet implemented"), and their execution will be skipped. JUnit 5 ignores all unit tests annotated
+with the @Disabled annotation.
 
 ```java
 class TestExample {
@@ -122,7 +146,9 @@ The JUnit 5 library offers many types of assertions. You can find the most used 
 8. assertNotSame(new Object(), new Object(), "should not be same Object");
 9. assertThrows(ExceptionClassName.class, () -> {});
 
-It is important to notice that almost all JUnit 5 assertions have the same parameters, in the same, standard order: the expected value, the actual value and optional failure message (which should have a meaningful content when used in practice).
+It is important to notice that almost all JUnit 5 assertions have the same parameters, in the same, standard order: the
+expected value, the actual value and optional failure message (which should have a meaningful content when used in
+practice).
 
 For further details, please refer to the JUnit testing links below.
 
@@ -151,13 +177,14 @@ public class Function {
 ```java
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FunctionTest {
     private Function function;
-    
+
     @BeforeEach
-    void setup() { 
+    void setup() {
         function = new Function();
     }
 
@@ -185,25 +212,38 @@ class FunctionTest {
 
 We are going to create a `MathChampionship` class that will handle the results of a Mathematics Championship.
 
-The `MathChampionship` class will have a list of `StudentScore` objects, each representing a student's name and the score they have achieved. Additionally, the `MathChampionship` class will also have a `maxAchievableScore` representing the maximum score a student can achieve.
+The `MathChampionship` class will have a list of `StudentScore` objects, each representing a student's name and the
+score they have achieved. Additionally, the `MathChampionship` class will also have a `maxAchievableScore` representing
+the maximum score a student can achieve.
 
-The main functionality of the `MathChampionship` class is to determine the prize a student has won based on their score. The criteria for awarding the prizes are as follows:
+The main functionality of the `MathChampionship` class is to determine the prize a student has won based on their score.
+The criteria for awarding the prizes are as follows:
 
-* If a student's score is more than 95% of the maxAchievableScore, they get a Gold medal. If no student has achieved this performance, the student with the highest score will get a Gold medal.
-* If a student's score is more than 90% of the maxAchievableScore, they get a Silver medal. If no student has achieved this performance, the student with the second highest score will get a Silver medal.
-* If a student's score is more than 85% of the maxAchievableScore, they get a Bronze medal. If no student has achieved this performance, the student with the third highest score will get a Bronze medal.
-* If a student's score is more than 80% of the maxAchievableScore, they get an honourable mention. If no student has achieved this performance, the next five highest scoring students (with scores at least 50% of the maxAchievableScore) get honourable mentions.
-The method `getPrize(String studentName)` of the `MathChampionship` class will receive a student's name as input and return the prize they have won. If the student is not found in the list, it will throw a `StudentNotFoundException`.
+* If a student's score is more than 95% of the maxAchievableScore, they get a Gold medal. If no student has achieved
+  this performance, the student with the highest score will get a Gold medal.
+* If a student's score is more than 90% of the maxAchievableScore, they get a Silver medal. If no student has achieved
+  this performance, the student with the second highest score will get a Silver medal.
+* If a student's score is more than 85% of the maxAchievableScore, they get a Bronze medal. If no student has achieved
+  this performance, the student with the third highest score will get a Bronze medal.
+* If a student's score is more than 80% of the maxAchievableScore, they get an honourable mention. If no student has
+  achieved this performance, the next five highest scoring students (with scores at least 50% of the maxAchievableScore)
+  get honourable mentions.
+  The method `getPrize(String studentName)` of the `MathChampionship` class will receive a student's name as input and
+  return the prize they have won. If the student is not found in the list, it will throw a `StudentNotFoundException`.
 
 Now, with a clear understanding of the problem, let's get started.
 
 ### 2.1. Step 1: Setting up JUnit Jupiter
 
-Before you start testing, you need to include JUnit Jupiter in your project. Depending on the build tool you are using, you can find the instructions below.
-Please download the `maven` branch as a starter for this exercise with Maven, and the `gradle` branch as a starter for this exercise with Gradle.
+Before you start testing, you need to include JUnit Jupiter in your project. Depending on the build tool you are using,
+you can find the instructions below.
+Please download the `maven` branch as a starter for this exercise with Maven, and the `gradle` branch as a starter for
+this exercise with Gradle.
 
 For Maven, add the following dependency in your `pom.xml`:
+
 ```xml
+
 <dependencies>
     <dependency>
         <groupId>org.junit.jupiter</groupId>
@@ -215,6 +255,7 @@ For Maven, add the following dependency in your `pom.xml`:
 ```
 
 For Gradle, add the following dependency in your `build.gradle`:
+
 ```groovy
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
@@ -226,6 +267,7 @@ dependencies {
 Create a package `org.loose.sef.junitexample` and add the following classes and enums:
 
 Create the `StudentScore` class:
+
 ```java
 package org.loose.sef.junitexample;
 
@@ -236,6 +278,7 @@ public record StudentScore {
 ```
 
 Create the `Prize` enum:
+
 ```java
 package org.loose.sef.junitexample;
 
@@ -245,6 +288,7 @@ public enum Prize {
 ```
 
 And here is the skeleton for MathChampionship class:
+
 ```java
 package org.loose.sef.junitexample;
 
@@ -264,6 +308,7 @@ public class MathChampionship {
 ```
 
 Create the `StudentNotFoundException` class:
+
 ```java
 package org.loose.sef.junitexample;
 
@@ -276,7 +321,8 @@ public class StudentNotFoundException extends RuntimeException {
 
 ### 3.3 Step 3: Start writing the tests
 
-Before we write the actual getPrize method, we're going to write the tests for it first. This is a key part of the TDD approach - you write your tests before your actual code.
+Before we write the actual getPrize method, we're going to write the tests for it first. This is a key part of the TDD
+approach - you write your tests before your actual code.
 
 Here's what a basic test class might look like:
 
@@ -284,6 +330,7 @@ Here's what a basic test class might look like:
 package org.loose.sef.junitexample;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MathChampionshipTest {
@@ -306,21 +353,29 @@ class MathChampionshipTest {
 Here are the basic test cases we should consider:
 
 1. `testGetGoldPrize` - A student whose score is more than 95% of the total achievable score should get a Gold medal.
-2. `testGetSilverPrize` - A student whose score is more than 90% of the total achievable score should get a Silver medal.
-3. `testGetBronzePrize` - A student whose score is more than 85% of the total achievable score should get a Bronze medal.
-4. `testGetMentionPrize` - A student whose score is more than 80% of the total achievable score should get an honourable mention.
+2. `testGetSilverPrize` - A student whose score is more than 90% of the total achievable score should get a Silver
+   medal.
+3. `testGetBronzePrize` - A student whose score is more than 85% of the total achievable score should get a Bronze
+   medal.
+4. `testGetMentionPrize` - A student whose score is more than 80% of the total achievable score should get an honourable
+   mention.
 5. `testGetNoPrize` - A student whose score is less than 80% of the total achievable score should get no prize.
 6. `testStudentNotFound` - If a student is not found in the list, the method should throw a StudentNotFoundException.
-7. `testGetGoldPrizeHighestScore` - If no student scores more than 95%, the student with the highest score should get a Gold medal.
-8. `testGetSilverPrizeSecondHighestScore` - If no student scores more than 90%, the student with the second-highest score should get a Silver medal.
-9. `testGetBronzePrizeThirdHighestScore` - If no student scores more than 85%, the student with the third-highest score should get a Bronze medal.
-10. `testGetMentionPrizeNextHighestScores` - If no student scores more than 80%, the next five highest scoring students (with scores at least 50%) should get an honourable mention.
+7. `testGetGoldPrizeHighestScore` - If no student scores more than 95%, the student with the highest score should get a
+   Gold medal.
+8. `testGetSilverPrizeSecondHighestScore` - If no student scores more than 90%, the student with the second-highest
+   score should get a Silver medal.
+9. `testGetBronzePrizeThirdHighestScore` - If no student scores more than 85%, the student with the third-highest score
+   should get a Bronze medal.
+10. `testGetMentionPrizeNextHighestScores` - If no student scores more than 80%, the next five highest scoring
+    students (with scores at least 50%) should get an honourable mention.
 
 Now let's implement the first two test cases:
 
 ```java
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MathChampionshipTest {
@@ -333,8 +388,8 @@ class MathChampionshipTest {
         mathChampionship.setMaxAchievableScore(100);
         // fill in student scores
         mathChampionship.setStudentScores(Arrays.asList(
-            new StudentScore("John Doe", 97),
-            new StudentScore("Jane Doe", 92)
+                new StudentScore("John Doe", 97),
+                new StudentScore("Jane Doe", 92)
         ));
     }
 
@@ -357,9 +412,9 @@ class MathChampionshipTest {
         // Assert
         assertEquals(Prize.SILVER, prize);
     }
-    
+
     // other tests
-    
+
     @Test
     @DisplayName("Test if searching for a student that doesn't exist throws a StudentNotFoundException")
     void testNoSuchStudent() {
@@ -369,38 +424,117 @@ class MathChampionshipTest {
 }
 ```
 
-In these tests, we first set up the `MathChampionship` object with some predefined student scores. 
-Then in the `testGetGoldPrize` test, we check if a student ("John Doe") with a score higher than 95% of the max achievable score gets a Gold medal. 
-Similarly, in the `testGetSilverPrize` test, we check if a student ("Jane Doe") with a score higher than 90% of the max achievable score gets a Silver medal.
+In these tests, we first set up the `MathChampionship` object with some predefined student scores.
+Then in the `testGetGoldPrize` test, we check if a student ("John Doe") with a score higher than 95% of the max
+achievable score gets a Gold medal.
+Similarly, in the `testGetSilverPrize` test, we check if a student ("Jane Doe") with a score higher than 90% of the max
+achievable score gets a Silver medal.
 
 Try running the tests now. To do this, press the green play button next to the test class name in the project explorer.
 
 The tests should fail, because we haven't implemented the `getPrize` method yet.
 
+### 3.3.1 Step 3.1: Read Student scores from a file
+
+We can read the student scores from a file. Create a file named `student_scores.csv` in the `src/test/resources` folder.
+We will store the data in CSV format.
+
+Here's what the file should look like (add at least 10 students)
+
+```csv
+John Doe,97
+Luke Skywalker,70
+Doctor Who,76
+Foo Bar,88
+Jill Hill,85
+Farmer Brown,79
+Captain Kirk,73
+Jack Black,82
+Princess Leia,67
+Jane Doe,92
+```
+
+Now we can read the student scores from the file. To read these scores into your test, add the following method to your
+test class:
+
+```java
+class MathChampionshipTest {
+    // other methods
+    private void readScoresFromCsv(String fileName) {
+        List<StudentScore> studentScores = new ArrayList<>();
+
+        Path pathToFile = Paths.get(getClass().getClassLoader().getResource(fileName).getPath());
+
+        try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)) {
+
+            String line = br.readLine();
+
+            while (line != null) {
+                String[] attributes = line.split(",");
+                StudentScore student = new StudentScore(attributes[0], Integer.parseInt(attributes[1]));
+                studentScores.add(student);
+                line = br.readLine();
+            }
+
+            mathChampionship.setStudentScores(studentScores);
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+
+    // other test methods
+}
+```
+
+Now you can use this method in a test to read the student scores from the CSV file:
+
+```java
+class MathChampionshipTest {
+    // other methods
+    
+    @Test
+    @DisplayName("Template for reading student scores from a CSV file")
+    @Disabled("This Test is just a template, do not add it to your test suite")
+    void testPrizeFromCsv() {
+        // Arrange
+        readScoresFromCsv("student_scores.csv");
+
+        // Act
+        Prize prize = mathChampionship.getPrize("Jane Doe");
+
+        // Assert
+        assertEquals(Prize.GOLD, prize);
+    }
+}
+```
+
 ### 3.4 Step 4: Implement the `getPrize` method
 
-After writing your tests, you can now implement the `getPrize` method. Since we have already written the tests, we can easily validate if our implementation is correct by running the tests.
+After writing your tests, you can now implement the `getPrize` method. Since we have already written the tests, we can
+easily validate if our implementation is correct by running the tests.
 
 Here's a basic implementation of the `getPrize` method:
 
 ```java
 class MathChampionship {
-    //...
-    
+    // ...
+
     public Prize getPrize(String studentName) {
         StudentScore targetStudent = null;
 
-        for(StudentScore student : studentScores) {
-            if(student.getName().equals(studentName)) {
+        for (StudentScore student : studentScores) {
+            if (student.getName().equals(studentName)) {
                 targetStudent = student;
                 break;
             }
         }
 
-        if(targetStudent == null) {
+        if (targetStudent == null) {
             throw new StudentNotFoundException();
         }
-    
+
         // find the prize
         if (studentScore.getScore() > 95) {
             return Prize.GOLD;
@@ -414,16 +548,19 @@ class MathChampionship {
             return Prize.NONE;
         }
     }
+    
     //...
 }
 ```
 
-Try running the tests now. To do this, press the green play button next to the test class name in the project explorer. Do all of them pass?
+Try running the tests now. To do this, press the green play button next to the test class name in the project explorer.
+Do all of them pass?
 If not, try to fix your implementation until all the tests pass.
 
 ### 3.5 Step 5: Run the tests using the build tool
 
-Now that we have written our tests, we can run them using the build tool. This is useful when you want to run your tests on a continuous integration server, or when you want to run your tests on a different machine.
+Now that we have written our tests, we can run them using the build tool. This is useful when you want to run your tests
+on a continuous integration server, or when you want to run your tests on a different machine.
 
 For Maven, you can run the tests using the following command:
 
@@ -441,7 +578,6 @@ For Gradle, you can run the tests using the following command:
 
 You should see your test report in the `build/reports/tests/test` directory.
 
-
 ### 3.6 Step 6: Adding JaCoCo (Java Code Coverage) Plugin
 
 JaCoCo is a code coverage library for Java. It provides information about the code coverage of your tests.
@@ -449,6 +585,7 @@ JaCoCo is a code coverage library for Java. It provides information about the co
 For Maven, you can add the Jacoco plugin to your `pom.xml`:
 
 ```xml
+
 <build>
     <plugins>
         <plugin>
@@ -495,18 +632,27 @@ test {
 }
 ```
 
-After running your tests with Jacoco enabled (`mvn test` for Maven, `gradle test jacocoTestReport` for Gradle), a report will be generated detailing your test coverage. This can help you see how much of your code is covered by your tests and where you might need to add more tests.
+After running your tests with Jacoco enabled (`mvn test` for Maven, `gradle test jacocoTestReport` for Gradle), a report
+will be generated detailing your test coverage. This can help you see how much of your code is covered by your tests and
+where you might need to add more tests.
 
 ### 3.7 Step 7: Interpreting the Jacoco report
 
-Jacoco generates a detailed report of which parts of your code have been tested. You can view this report by opening the `index.html` file in the directory specified in your Maven or Gradle configuration (by default, this is in `target/site/jacoco` for Maven and `build/reports/jacoco/test/html` for Gradle).
+Jacoco generates a detailed report of which parts of your code have been tested. You can view this report by opening
+the `index.html` file in the directory specified in your Maven or Gradle configuration (by default, this is
+in `target/site/jacoco` for Maven and `build/reports/jacoco/test/html` for Gradle).
 
-The report contains information such as the percentage of lines covered, the number of branches covered, and more. You should aim for high code coverage, but remember that 100% coverage does not necessarily mean your tests are perfect. It is also important to write meaningful tests that check the logic of your code rather than just aiming for high coverage.
+The report contains information such as the percentage of lines covered, the number of branches covered, and more. You
+should aim for high code coverage, but remember that 100% coverage does not necessarily mean your tests are perfect. It
+is also important to write meaningful tests that check the logic of your code rather than just aiming for high coverage.
 
-In the context of the `MathChampionship` class, you should ensure that you have tests covering all the possible prize categories, as well as edge cases such as students with the same score, and students not found in the list.
+In the context of the `MathChampionship` class, you should ensure that you have tests covering all the possible prize
+categories, as well as edge cases such as students with the same score, and students not found in the list.
 
 ### 3.8 Step 8: Adding Other tests
 
-Now that you have completed a basic test for the `MathChampionship` class, you can try adding more tests to cover other classes and methods in your project. You can also try adding more tests for the `MathChampionship` class to cover more edge cases.
+Now that you have completed a basic test for the `MathChampionship` class, you can try adding more tests to cover other
+classes and methods in your project. You can also try adding more tests for the `MathChampionship` class to cover more
+edge cases.
 
 For example

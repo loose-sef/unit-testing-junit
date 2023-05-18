@@ -517,7 +517,13 @@ class MathChampionshipTest {
     private void readScoresFromCsv(String fileName) {
         List<StudentScore> studentScores = new ArrayList<>();
 
-        Path pathToFile = Paths.get(getClass().getClassLoader().getResource(fileName).getPath());
+        try {
+            Path pathToFile = Paths.get(getClass().getClassLoader().getResource(fileName).toURI());
+        }
+        catch (URISyntaxException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Could not read file", e);
+        }
 
         try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.UTF_8)) {
 

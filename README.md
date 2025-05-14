@@ -456,7 +456,7 @@ class MathChampionship {
         StudentScore targetStudent = null;
 
         for (StudentScore student : studentScores) {
-            if (student.name().equals(studentName)) {
+            if (student.getStudentName().equals(studentName)) {
                 targetStudent = student;
                 break;
             }
@@ -516,9 +516,9 @@ class MathChampionshipTest {
     // other methods
     private void readScoresFromCsv(String fileName) {
         List<StudentScore> studentScores = new ArrayList<>();
-
+        Path pathToFile;
         try {
-            Path pathToFile = Paths.get(getClass().getClassLoader().getResource(fileName).toURI());
+            pathToFile = Paths.get(getClass().getClassLoader().getResource(fileName).toURI());
         }
         catch (URISyntaxException e) {
             e.printStackTrace();
